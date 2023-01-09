@@ -6,43 +6,36 @@
 /*   By: mbraga-s <mbraga-s@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 19:29:41 by mbraga-s          #+#    #+#             */
-/*   Updated: 2023/01/09 12:10:45 by mbraga-s         ###   ########.fr       */
+/*   Updated: 2023/01/09 16:47:29 by mbraga-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-//verificar se é preciso salvaguardar o valor de fd (ser positivo ou maior que 2 por exemplo)
-
 char	*get_next_line(int fd)
 {
-	size_t			BUFFER_SIZE;
-	static size_t	i;
-	size_t			j;
-	char			*buffer;
-	char			*line;
+	char		*buffer;
+	char		*line;
+	static char	*temp;
+	ssize_t		i;
+	int			flag;
 
-	//i = 0;
-	j = 0;
-	//BUFFER_SIZE = 42;
-	//Cria um buffer e lê um x número de bytes para dentro deste
+	flag = 1;
 	buffer = malloc(BUFFER_SIZE + 1);
 	buffer[BUFFER_SIZE] = '\0';
 	if (!buffer)
-		return (NULL);
-	read(fd, buffer, BUFFER_SIZE);
-	//Percorre o buffer até acabar ou encontrar \n
-	//De seguida copia para outra zona alocada, liberta o buffer e retorna a nova zona
-	i = phrase_len(buffer, i);
-	line = malloc(i + 1);
-	if (!line)
-		return (NULL);
-	while ((j < i) && buffer[j])
+		return (0);
+	while (flag)
 	{
-		line[j] = buffer[j];
-		j++;
+		i = read(fd, buffer, BUFFER_SIZE);
+		if (i == -1)
+			return (0);
+		else if (i == 0)
+			break ;
+		temp = ft_strjoin(temp, buffer);
+		flag = ft_newline(temp);
 	}
-	free(buffer);
-	line[j] = '\0';
+	free (buffer);
+	line = ft_line(temp, i);
 	return (line);
 }
