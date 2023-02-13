@@ -6,7 +6,7 @@
 /*   By: mbraga-s <mbraga-s@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 19:31:41 by mbraga-s          #+#    #+#             */
-/*   Updated: 2023/02/13 17:09:47 by mbraga-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 17:25:35 by mbraga-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 char	*get_next_line(int fd);
 
-char	*ft_strjoin(char *str1, char *str2);
+char	*ft_strjoin(char *s1, char *s2);
 
 int		ft_strlen(char *str);
 
