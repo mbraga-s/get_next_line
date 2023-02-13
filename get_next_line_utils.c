@@ -6,7 +6,7 @@
 /*   By: mbraga-s <mbraga-s@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 09:22:59 by mbraga-s          #+#    #+#             */
-/*   Updated: 2023/01/09 16:51:29 by mbraga-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 17:09:29 by mbraga-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,32 +17,31 @@ int	ft_strlen(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i])
+	while (str[i] && str[i] != '\n')
+		i++;
+	if (str[i] != '\n')
 		i++;
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+/* char	*ft_strjoin(char *s1, char *s2)
 {
-	size_t	len1;
-	size_t	len2;
-	size_t	i;
-	size_t	j;
+	int		i;
+	int		j;
 	char	*ptr;
 
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
 	i = 0;
 	j = 0;
-	ptr = (char *)malloc(len1 + len2 + 1);
+	ptr = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!ptr)
 		return (0);
-	while (i < len1)
+	while (i < ft_strlen(s1))
 	{
 		ptr[i] = s1[i];
 		i++;
 	}
-	while ((i + j) < (len1 + len2))
+	free (s1);
+	while ((i + j) < (ft_strlen(s1) + ft_strlen(s2)))
 	{
 		ptr[i + j] = s2[j];
 		j++;
@@ -50,34 +49,54 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ptr[i + j] = '\0';
 	return (ptr);
 }
+ */
 
-int	ft_newline(char *str)
+char	*ft_strjoin(char *str1, char *str2)
 {
-	int	i;
+	int		i;
+	int		j;
+	char	*l_saved;
 
 	i = 0;
-	while (str[i])
+	j = 0;
+	l_saved = malloc(ft_strlen(str1) + ft_strlen(str2) + 1);
+	if (!l_saved)
+		return (NULL);
+	while (str1 && str1[i])
 	{
-		if (str[i] == '\n')
-			return (0);
+		l_saved[i] = str1[i];
 		i++;
 	}
-	return (1);
+	free(str1);
+	while (str2[j])
+	{
+		l_saved[i++] = str2[j];
+		if (str2[j++] == '\n')
+			break ;
+	}
+	l_saved[i] = '\0';
+	return (l_saved);
 }
 
-char	*ft_line(char *temp, int i)
+int	ft_clean(char *ptr)
 {
-	char	*line;
-	int		j;
+	int	i;
+	int	j;
+	int	flag;
 
+	i = 0;
 	j = 0;
-	while (temp[j] != '\n' && temp[j])
-		j++;
-	if (i == 0)
-		line = malloc(j + 1);
-	else
-		line = malloc(j + 2);
-	if (!line)
-		return (0);
-	
+	while (ptr[i])
+	{
+		if (flag == 1)
+		{
+			ptr[j] = ptr[i];
+			j++;
+		}
+		if (ptr[i] == '\n')
+			flag = 1;
+		ptr[i] = '\0';
+		i++;
+	}
+	return (flag);
 }

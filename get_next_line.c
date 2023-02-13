@@ -6,7 +6,7 @@
 /*   By: mbraga-s <mbraga-s@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 19:29:41 by mbraga-s          #+#    #+#             */
-/*   Updated: 2023/01/09 16:47:29 by mbraga-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 17:04:51 by mbraga-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,26 @@
 
 char	*get_next_line(int fd)
 {
-	char		*buffer;
 	char		*line;
-	static char	*temp;
-	ssize_t		i;
-	int			flag;
+	static char	stash[BUFFER_SIZE + 1];
+	int			i;
 
-	flag = 1;
-	buffer = malloc(BUFFER_SIZE + 1);
-	buffer[BUFFER_SIZE] = '\0';
-	if (!buffer)
-		return (0);
-	while (flag)
+	i = 0;
+	line = 0;
+	stash[BUFFER_SIZE] = '\0';
+	if (BUFFER_SIZE < 1 && read(fd, 0, 0) < 0)
 	{
-		i = read(fd, buffer, BUFFER_SIZE);
-		if (i == -1)
-			return (0);
-		else if (i == 0)
-			break ;
-		temp = ft_strjoin(temp, buffer);
-		flag = ft_newline(temp);
+		while (stash[i])
+			stash[i++] = 0;
+		return (0);
 	}
-	free (buffer);
-	line = ft_line(temp, i);
+	if (fd < 0)
+		return (0);
+	while (stash[0] || read (fd, stash, BUFFER_SIZE) > 0)
+	{
+		line = ft_strjoin(line, stash);
+		if (!ft_clean(stash))
+			break ;
+	}
 	return (line);
 }
